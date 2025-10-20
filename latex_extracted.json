@@ -1,6 +1,6 @@
 [
   {
-    "file_id": "7e2a20a7-6676-40f9-8654-6f9f8feaef1a",
+    "file_id": "9b487f60-5b18-4813-9622-e8dc3c325ed3",
     "file_name": "arxiv1.tex",
     "authors": [
       "Xuancong He",
@@ -150,14 +150,14 @@
     ]
   },
   {
-    "file_id": "c5aac9b8-b467-43c2-bc03-2bf33a02bde3",
+    "file_id": "97992916-8070-4d33-b8af-da9f8353afe2",
     "file_name": "main.tex",
     "authors": [
       "Elke Neuhaus",
       "Niharika Chakrabarty Paul",
       "Irem Portakal"
     ],
-    "title": null,
+    "title": "Torus Actions on Matrix Schubert and Kazhdan-Lusztig Varieties,\\\\\nand their Links to Statistical Models",
     "sections": [
       {
         "name": "Introduction and basic notions",
@@ -299,7 +299,7 @@
     ]
   },
   {
-    "file_id": "a6ff92c7-27ca-45f0-bbe0-2abb077bbf6f",
+    "file_id": "f68bfaa0-8f2a-47b0-bd8d-3381165ec9c8",
     "file_name": "UnexpectedQHD.tex",
     "authors": [
       "M\\'arton Beke",
@@ -431,7 +431,7 @@
     ]
   },
   {
-    "file_id": "4c6f290f-4ea1-4f52-a609-9575c8240947",
+    "file_id": "1a5aacf4-2c3a-46e0-96cb-550448f76461",
     "file_name": "van3fold.tex",
     "authors": [
       "Hsueh-Yung Lin, Evgeny Shinder"
