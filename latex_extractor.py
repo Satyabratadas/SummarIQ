@@ -16,7 +16,8 @@ class LatexExtractor:
             content = f.read()
 
         # Extract title
-        title_match = re.search(r'\\title\s*\{([\s\S]*?)\}', content, re.DOTALL)
+        title_match = re.search(r'\\title(?:\[[^\]]*\])?\s*\{([\s\S]*?)\}', content, re.DOTALL)
+
         title = title_match.group(1).strip() if title_match else None
 
         # Extract authors (supporting multiple)
