@@ -1,7 +1,14 @@
 [
   {
-    "file_id": "17264fe5-9b3d-4e3c-a485-e05a93d1c451",
+    "file_id": "7e2a20a7-6676-40f9-8654-6f9f8feaef1a",
     "file_name": "arxiv1.tex",
+    "authors": [
+      "Xuancong He",
+      "Yi Li",
+      "Shihao Wang",
+      "Zhiwei Zheng"
+    ],
+    "title": "Cubic Fourfolds with an Order-$7$ Automorphism",
     "sections": [
       {
         "name": "Introduction",
@@ -143,8 +150,14 @@
     ]
   },
   {
-    "file_id": "27f2f38b-74aa-49de-8caf-3f74dbe07af7",
+    "file_id": "c5aac9b8-b467-43c2-bc03-2bf33a02bde3",
     "file_name": "main.tex",
+    "authors": [
+      "Elke Neuhaus",
+      "Niharika Chakrabarty Paul",
+      "Irem Portakal"
+    ],
+    "title": null,
     "sections": [
       {
         "name": "Introduction and basic notions",
@@ -286,8 +299,14 @@
     ]
   },
   {
-    "file_id": "2c5682f0-d97b-4152-80d6-83622236a5b9",
+    "file_id": "a6ff92c7-27ca-45f0-bbe0-2abb077bbf6f",
     "file_name": "UnexpectedQHD.tex",
+    "authors": [
+      "M\\'arton Beke",
+      "Olga Plamenevskaya",
+      "Laura Starkston"
+    ],
+    "title": "An unexpected rational blowdown",
     "sections": [
       {
         "name": "Introduction",
@@ -412,8 +431,12 @@
     ]
   },
   {
-    "file_id": "40452ecc-b484-4384-b209-6ea932ac2100",
+    "file_id": "4c6f290f-4ea1-4f52-a609-9575c8240947",
     "file_name": "van3fold.tex",
+    "authors": [
+      "Hsueh-Yung Lin, Evgeny Shinder"
+    ],
+    "title": "Unboundedness\nfor motivic invariants \nof birational  automorphisms",
     "sections": [
       {
         "name": "Introduction",
