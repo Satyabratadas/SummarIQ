@@ -9,6 +9,8 @@ class Summarizer:
 
         if torch.backends.mps.is_available():
             self.device = "mps"
+        elif torch.cuda.is_available():
+            self.device = "cuda"
         else:
             self.device = "cpu"
         
@@ -20,23 +22,24 @@ class Summarizer:
 
         print(f"Model successfully loaded on device: {self.device}")
 
-    def t5_generate(self, prompt, max_length=300):
+    def t5_generate(self, prompt, max_length=350):
         inputs = self.tokenizer(
             prompt,
             return_tensors="pt",
             truncation=True,
-            max_length=1024
+            max_length=512
         ).to(self.device)
 
         out_ids = self.model.generate(
             inputs["input_ids"],
             num_beams=4,
             max_length=max_length,
+            do_sample=False,
             no_repeat_ngram_size=3
         )
 
         summary = self.tokenizer.decode(out_ids[0], skip_special_tokens=True)
-        return summary
+        return self.clean_summary(summary)
 
     def clean_summary(self, text):
         if not text:
@@ -79,7 +82,7 @@ class Summarizer:
             ---
             Write the abstract summary below (5–7 full sentences):
                 """
-        return self.t5_generate(prompt)
+        return self.t5_generate(prompt, max_length=300)
     
     def get_section_instruction(self, section_name):
         name = section_name.lower()
@@ -115,16 +118,9 @@ class Summarizer:
 
         return "Summarize this section accurately and clearly."
     
-    def summarize_section(self, section_name, section_text, important_equations=None):
-        if important_equations is None:
-            important_equations = []
-
-        eq_text = "\n\n".join(
-            f"```latex\n{eq}\n```" for eq in important_equations
-        )
-
+    def build_summary_prompt(self, section_name, section_text, important_equations):
+        eq_text = "\n\n".join(f"```latex\n{eq}\n```" for eq in important_equations)
         section_instruction = self.get_section_instruction(section_name)
-
         prompt = f"""
             You are summarizing a section of a scientific mathematics paper.
             Follow the instructions below to summarize correctly.
@@ -141,7 +137,50 @@ class Summarizer:
 
             Write a detailed, clear, human-friendly summary (5–7 sentences).
             """
-        return self.t5_generate(prompt, max_length=350)
+
+        return prompt
+    
+    def split_into_chunks(self, text, max_tokens=300):
+        sentences = text.split(". ")
+        chunks, current = [], ""
+
+        for s in sentences:
+            if len(current.split()) + len(s.split()) < max_tokens:
+                current += s + ". "
+            else:
+                chunks.append(current.strip())
+                current = s + ". "
+
+        if current:
+            chunks.append(current.strip())
+
+        return chunks
+    
+    def summarize_section(self, section_name, section_text, important_equations=None):
+        if important_equations is None:
+            important_equations = []
+
+        # Step 1: split into small chunks
+        small_chunks = self.split_into_chunks(section_text, max_tokens=250)
+        partial_summaries = []
+
+        # Step 2: summarize each chunk separately
+        for chunk_text in small_chunks:
+            prompt = self.build_summary_prompt(section_name, chunk_text, important_equations)
+            partial_summaries.append(self.t5_generate(prompt))
+
+        # Step 3: combine summaries
+        combined_summary = " ".join(partial_summaries)
+
+        # Step 4: compress final summary
+        final_prompt = f"""
+                Combine and compress the following partial summaries into a single clear summary (3–5 sentences):
+
+                {combined_summary}
+
+                Output ONLY the final summary below:
+                """
+        return self.t5_generate(final_prompt, max_length=300)
     
     def explain_equation(self, eq_latex):
         prompt = (
