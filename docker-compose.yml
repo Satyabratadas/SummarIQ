@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  summar_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: summar-iq-1
+    ports:
+      - "8000:8000"
+    restart: always
