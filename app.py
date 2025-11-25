@@ -1,10 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from summarizer.summarizer import Summarizer
-from kaggleserver_modelrun.summarizer_remote import SummarizerRemote
+from kaggleserver_MLmodel.summarizer_remote import SummarizerRemote
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
+from pydantic import BaseModel
+from equation_renderer.renderer import latex_to_png_base64
 import json
 
 
@@ -28,8 +29,37 @@ summarizer = SummarizerRemote()
 ## Load LatexExtractor
 extractor = LatexExtractor()
 
-## Summarization Endpoint
+# ##   Equation Render API
 
+# class EqModel(BaseModel):
+#     latex: str
+
+# @app.post("/render")
+# def render(eq: EqModel):
+#     img_b64 = latex_to_png_base64(eq.latex)
+
+#     if img_b64 is None:
+#         return {
+#             "status": "failed",
+#             "message": "Rendering failed",
+#             "latex": eq.latex
+#         }
+
+#     return {
+#         "status": "ok",
+#         "latex": eq.latex,
+#         "image_base64": img_b64
+#     }
+
+
+
+##   Equation Render function 
+def get_equation_image(latex: str):
+    """Return raw base64 for a LaTeX equation."""
+    return latex_to_png_base64(latex)
+
+
+## Summarization Endpoint
 @app.post("/summarize-latex")
 async def summarize_latex(file: UploadFile = File(...)):
     """
@@ -53,6 +83,21 @@ async def summarize_latex(file: UploadFile = File(...)):
     paper = extractor.extract_sections_from_file(tmp_path, file_name)
 
     final_json = summarizer.summarize(paper)
+
+    important_eqs = final_json.get("important_equations", [])
+    enhanced_eqs = []
+
+    for idx, eq_item in enumerate(important_eqs, start=1):
+
+        latex_code = eq_item["equation"]
+        raw_b64 = get_equation_image(latex_code)
+        enhanced_eqs.append({
+            "equation_number": idx,
+            "latex": latex_code,
+            "raw_image_base64": raw_b64
+        })
+        
+    final_json["important_equations"] = enhanced_eqs
 
     try:
         os.remove(tmp_path)
