@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from summarizer.summarizer import Summarizer
-from summarizer_remote import SummarizerRemote
+from kaggleserver_modelrun.summarizer_remote import SummarizerRemote
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os

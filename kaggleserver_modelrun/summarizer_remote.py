@@ -11,9 +11,8 @@ class SummarizerRemote:
 
         self.NGROK_URL = "https://lakisha-deltaic-conception.ngrok-free.dev"
 
-    # ---------------------------------------------------------
-    # ------------------- EQUATION SCORING ---------------------
-    # ---------------------------------------------------------
+    ##  EQUATION SCORING
+    
     def score_equation(self, eq):
         score = 0
 
@@ -38,9 +37,8 @@ class SummarizerRemote:
         scored_sorted = sorted(scored, key=lambda x: x[1], reverse=True)
         return [eq for eq, score in scored_sorted[:5]]
 
-    # ---------------------------------------------------------
-    # -------------------- CLEAN TEXT -------------------------
-    # ---------------------------------------------------------
+    ##      CLEAN TEXT 
+
     def clean_text(self, text):
         text = re.sub(r"\$[^$]*\$", " ", text)
         text = re.sub(r"\\\[.*?\\\]", " ", text, flags=re.DOTALL)
@@ -75,9 +73,8 @@ class SummarizerRemote:
         cleaned["sections"] = cleaned_secs
         return cleaned
 
-    # ---------------------------------------------------------
-    # --------------------- T5 GENERATE ------------------------
-    # ---------------------------------------------------------
+    ## T5 GENERATE 
+
     def t5_generate(self, prompt, max_len=150):
          ## use kaggle T5 api
         url = self.NGROK_URL + "/generate"
@@ -88,9 +85,7 @@ class SummarizerRemote:
             print("Remote server error:", res.text)
             return ""
 
-    # ---------------------------------------------------------
-    # --------------- ABSTRACT SUMMARY -------------------------
-    # ---------------------------------------------------------
+   
 
     ## Remove summary promt after summarise the chunk
     def strip_prompt_artifacts(self, text):
@@ -127,7 +122,8 @@ class SummarizerRemote:
         cleaned = re.sub(r"\s+", " ", cleaned).strip()
         return cleaned
 
-##.  ABSTRACT SUMMARY. ##
+     ##  ABSTRACT SUMMARY 
+
     def summarize_abstract(self, paper):
         abstract = paper["abstract"]
 
@@ -145,9 +141,8 @@ class SummarizerRemote:
         abs_summary = self.t5_generate(prompt)
         return self.strip_prompt_artifacts(abs_summary)
 
-    # ---------------------------------------------------------
-    # --------------- SECTION SUMMARIES ------------------------
-    # ---------------------------------------------------------
+    ## SECTION SUMMARIES 
+
     def build_chunk_prompt(self, chunk):
         return "Summarize the following text in 2 sentences:" + chunk + "Summary:"
 
@@ -184,9 +179,7 @@ class SummarizerRemote:
             "summary": summary
         }
 
-    # ---------------------------------------------------------
-    # --------------- FINAL JSON BUILDER -----------------------
-    # ---------------------------------------------------------
+    ##  FINAL JSON BUILDER 
     def build_final_json(self, abstract_summary, section_summaries, important_top5, raw_paper):
         sections_out = []
         for sec in section_summaries:
@@ -212,9 +205,8 @@ class SummarizerRemote:
 
         return final_json
 
-    # ---------------------------------------------------------
-    # ----------------- MAIN ENTRY POINT -----------------------
-    # ---------------------------------------------------------
+   
+    ## MAIN ENTRY POINT 
     def summarize(self, paper):
         cleaned_paper = self.clean_paper_for_t5(paper)
 
