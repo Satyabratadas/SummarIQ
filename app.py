@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-from kaggleserver_MLmodel.summarizer_remote import SummarizerRemote
+from kaggleserver_summarizer.summarizer_remote import SummarizerRemote
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
@@ -28,29 +28,6 @@ summarizer = SummarizerRemote()
 
 ## Load LatexExtractor
 extractor = LatexExtractor()
-
-# ##   Equation Render API
-
-# class EqModel(BaseModel):
-#     latex: str
-
-# @app.post("/render")
-# def render(eq: EqModel):
-#     img_b64 = latex_to_png_base64(eq.latex)
-
-#     if img_b64 is None:
-#         return {
-#             "status": "failed",
-#             "message": "Rendering failed",
-#             "latex": eq.latex
-#         }
-
-#     return {
-#         "status": "ok",
-#         "latex": eq.latex,
-#         "image_base64": img_b64
-#     }
-
 
 
 ##   Equation Render function 
@@ -96,7 +73,7 @@ async def summarize_latex(file: UploadFile = File(...)):
             "latex": latex_code,
             "raw_image_base64": raw_b64
         })
-        
+
     final_json["important_equations"] = enhanced_eqs
 
     try:
