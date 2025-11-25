@@ -1,13 +1,29 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from kaggleserver_summarizer.summarizer_remote import SummarizerRemote
+from prometheus_client import Counter, Histogram, generate_latest
 # from summarizer_local import SummarizerLocal
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
 from pydantic import BaseModel
 from equation_renderer.renderer import latex_to_png_base64
+import time
 import json
+import gradio as gr
+
+REQUEST_COUNT = Counter(
+    "summariq_request_count",
+    "Total number of requests to SummarIQ API",
+    ["method", "endpoint", "http_status"]
+)
+
+REQUEST_LATENCY = Histogram(
+    "summariq_request_latency_seconds",
+    "Latency of SummarIQ API requests",
+    ["endpoint"]
+)
+
 
 
 app = FastAPI(
@@ -38,6 +54,22 @@ extractor = LatexExtractor()
 def get_equation_image(latex: str):
     """Return raw base64 for a LaTeX equation."""
     return latex_to_png_base64(latex)
+
+##   Prometheus Metrics calculate
+@app.middleware("http")
+async def prometheus_metrics(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+
+    REQUEST_LATENCY.labels(request.url.path).observe(process_time)
+    REQUEST_COUNT.labels(request.method, request.url.path, response.status_code).inc()
+
+    return response
+
+@app.get("/metrics")
+async def metrics():
+    return Response(generate_latest(), media_type="text/plain")
 
 
 ## Summarization Endpoint
