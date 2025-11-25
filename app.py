@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from kaggleserver_summarizer.summarizer_remote import SummarizerRemote
+# from summarizer_local import SummarizerLocal
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
@@ -23,8 +24,11 @@ app.add_middleware( CORSMiddleware,
 
 ## MODEL_PATH = "/content/drive/MyDrive/Summar_IQ_T5Model/t5_large"           ## need to change accordingly
 
-## Load summarizer model ONCE at server startup
+## Load summarizer remote model from kaggle ONCE at server startup
 summarizer = SummarizerRemote()
+
+## Load summarizer local model ONCE at server startup
+# summarizer = SummarizerLocal(model_name="t5-small")
 
 ## Load LatexExtractor
 extractor = LatexExtractor()

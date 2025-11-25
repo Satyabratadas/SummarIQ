@@ -1,0 +1,11 @@
+__pycache__/
+Notebooks/
+App design/
+Project Report/
+*.ipynb
+*.pdf
+*.png
+*.jpg
+*.jpeg
+Dockerfile
+.git
