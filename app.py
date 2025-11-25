@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from summarizer.summarizer import Summarizer
+from summarizer_remote import SummarizerRemote
 from extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
@@ -19,10 +20,10 @@ app.add_middleware( CORSMiddleware,
     allow_methods=["*"],allow_headers=["*"],
 )
 
-MODEL_PATH = "/content/drive/MyDrive/Summar_IQ_T5Model/t5_large"           ## need to change accordingly
+## MODEL_PATH = "/content/drive/MyDrive/Summar_IQ_T5Model/t5_large"           ## need to change accordingly
 
 ## Load summarizer model ONCE at server startup
-summarizer = Summarizer(model_path=MODEL_PATH)
+summarizer = SummarizerRemote()
 
 ## Load LatexExtractor
 extractor = LatexExtractor()

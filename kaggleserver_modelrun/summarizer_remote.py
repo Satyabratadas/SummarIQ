@@ -5,13 +5,9 @@ import requests
 
 
 
-class Summarizer:
+class SummarizerRemote:
 
     def __init__(self, model_path="google-t5/t5-small"):
-        # Load local model
-        # self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        # self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        # self.model = AutoModelForSeq2SeqLM.from_pretrained(model_path).to(self.device)
 
         self.NGROK_URL = "https://lakisha-deltaic-conception.ngrok-free.dev"
 
@@ -83,29 +79,14 @@ class Summarizer:
     # --------------------- T5 GENERATE ------------------------
     # ---------------------------------------------------------
     def t5_generate(self, prompt, max_len=150):
-        # inputs = self.tokenizer(
-        #     prompt,
-        #     return_tensors="pt",
-        #     truncation=True,
-        #     max_length=512
-        # ).to(self.device)
-
-        # out = self.model.generate(
-        #     inputs["input_ids"],
-        #     num_beams=4,
-        #     length_penalty=1.0,
-        #     no_repeat_ngram_size=2,
-        #     max_length=max_len,
-        #     do_sample=False
-        # )
-
-        # return self.tokenizer.decode(out[0], skip_special_tokens=True)
-
-        ## use kaggle T5 api
-        url = self.KAGGLE_BASE_URL + "/generate"
+         ## use kaggle T5 api
+        url = self.NGROK_URL + "/generate"
         res = requests.post(url, json={"prompt": prompt})
-        data = res.json()
-        return data.get("text", "")
+        try:
+            return res.json().get("text", "")
+        except:
+            print("Remote server error:", res.text)
+            return ""
 
     # ---------------------------------------------------------
     # --------------- ABSTRACT SUMMARY -------------------------
