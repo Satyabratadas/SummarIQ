@@ -1,6 +1,6 @@
-import torch
-import re
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+# import torch
+# import re
+# from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import requests
 
 
