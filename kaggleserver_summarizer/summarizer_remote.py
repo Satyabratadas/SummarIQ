@@ -3,7 +3,18 @@
 # from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 import requests
 import re
+from prometheus_client import Counter, Gauge
 
+PREDICTION_COUNTER = Counter(
+    "summariq_predictions_total",
+    "Total number of predictions produced by SummarIQ",
+    ["prediction_type"]
+)
+
+CONFIDENCE_GAUGE = Gauge(
+    "summariq_prediction_confidence",
+    "Confidence score of the summarizer prediction"
+)
 
 
 class SummarizerRemote:
@@ -140,6 +151,11 @@ class SummarizerRemote:
             + "\n\nAcademic summary:"
         )
         abs_summary = self.t5_generate(prompt)
+
+        # PROMETHEUS METRICS HERE
+        PREDICTION_COUNTER.labels("abstract_summary").inc()
+        CONFIDENCE_GAUGE.set(1.0)   # static for now
+
         return self.strip_prompt_artifacts(abs_summary)
 
     ## SECTION SUMMARIES 
@@ -175,6 +191,10 @@ class SummarizerRemote:
         section_name = sec["name"]
         section_text = sec["content"]
         summary = self.summarize_section_t5(section_text)
+
+        # PROMETHEUS METRICS HERE
+        PREDICTION_COUNTER.labels("abstract_summary").inc()
+        CONFIDENCE_GAUGE.set(1.0)   # static for now
         return {
             "section_name": section_name,
             "summary": summary
@@ -212,13 +232,19 @@ class SummarizerRemote:
         cleaned_paper = self.clean_paper_for_t5(paper)
 
         equations = paper.get("equations", [])
+
         important_top5 = self.get_top5_from_extracted(equations)
+        PREDICTION_COUNTER.labels("abstract_summary").inc()
+        CONFIDENCE_GAUGE.set(1.0)   # static for now
 
         abstract_summary = self.summarize_abstract(cleaned_paper)
 
         section_summaries = []
         for sec in cleaned_paper["sections"]:
             section_summaries.append(self.summarize_section(sec))
+
+        PREDICTION_COUNTER.labels("final_summary").inc()
+        CONFIDENCE_GAUGE.set(1.0)
 
         final_json = self.build_final_json(
             abstract_summary=abstract_summary,

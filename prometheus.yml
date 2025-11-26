@@ -1,8 +1,13 @@
 global:
   scrape_interval: 5s
 
+# scrape_configs:
+#   - job_name: 'summar_api'
+#     static_configs:
+#       - targets: ['gradio-app:8000']
+
 scrape_configs:
-  - job_name: "summariq_api"
+  - job_name: 'summar_api'
     metrics_path: /metrics
     static_configs:
-      - targets: ["summar_api:8000"]
+      - targets: ['summar_api:8000']
