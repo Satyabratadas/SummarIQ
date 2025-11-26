@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from kaggleserver_summarizer.summarizer_remote import SummarizerRemote
-from prometheus_client import Counter, Histogram, generate_latest
+from prometheus_client import Counter, Histogram, generate_latest, Gauge
 # from summarizer_local import SummarizerLocal
 from extractor.latex_extractor import LatexExtractor
 import tempfile
@@ -12,7 +12,12 @@ import time
 import json
 import gradio as gr
 
-REQUEST_COUNT = Counter(
+class FeedbackModel(BaseModel):
+    name: str | None = None
+    rating: int
+    comments: str | None = None
+
+PREDICTION_COUNTER = Counter(
     "summariq_request_count",
     "Total number of requests to SummarIQ API",
     ["method", "endpoint", "http_status"]
@@ -24,6 +29,33 @@ REQUEST_LATENCY = Histogram(
     ["endpoint"]
 )
 
+
+# FEEDBACK METRICS
+FEEDBACK_COUNT = Counter(
+    "summariq_feedback_total",
+    "Total number of user feedback submissions"
+)
+
+FEEDBACK_RATING_HIST = Histogram(
+    "summariq_feedback_rating",
+    "Distribution of feedback ratings",
+    buckets=[1, 2, 3, 4, 5]
+)
+
+LAST_FEEDBACK_RATING = Gauge(
+    "summariq_feedback_latest_rating",
+    "Most recent rating submitted by a user"
+)
+
+FEEDBACK_WITH_COMMENTS = Counter(
+    "summariq_feedback_with_comments_total",
+    "Total feedback entries containing comments"
+)
+
+FEEDBACK_NO_COMMENTS = Counter(
+    "summariq_feedback_no_comments_total",
+    "Total feedback entries without comments"
+)
 
 
 app = FastAPI(
@@ -63,9 +95,25 @@ async def prometheus_metrics(request: Request, call_next):
     process_time = time.time() - start_time
 
     REQUEST_LATENCY.labels(request.url.path).observe(process_time)
-    REQUEST_COUNT.labels(request.method, request.url.path, response.status_code).inc()
+    PREDICTION_COUNTER.labels(request.method, request.url.path, response.status_code).inc()
 
     return response
+
+@app.post("/feedback")
+async def feedback_endpoint(fb: FeedbackModel):
+
+    # Update Prometheus metrics
+    FEEDBACK_COUNT.inc()
+    FEEDBACK_RATING_HIST.observe(fb.rating)
+    LAST_FEEDBACK_RATING.set(fb.rating)
+
+    if fb.comments and fb.comments.strip():
+        FEEDBACK_WITH_COMMENTS.inc()
+    else:
+        FEEDBACK_NO_COMMENTS.inc()
+
+    return {"status": "ok", "msg": "Feedback recorded"}
+
 
 @app.get("/metrics")
 async def metrics():

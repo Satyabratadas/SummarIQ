@@ -33,7 +33,7 @@ services:
       - summar_api
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
@@ -41,6 +41,11 @@ services:
       - prometheus
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:
 
 
 
