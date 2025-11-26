@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from kaggleserver_summarizer.summarizer_remote import SummarizerRemote
+from models.summarizer_remote import SummarizerRemote
 from prometheus_client import Counter, Histogram, generate_latest, Gauge
 # from summarizer_local import SummarizerLocal
 from extractor.latex_extractor import LatexExtractor
