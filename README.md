@@ -4,21 +4,21 @@ SummarIQ is an AI-powered system designed to summarize scientific research paper
 
 This project includes:
 
-- 🧠 **AI summarization models (T5, BART)**
-- 📄 **LaTeX equation extraction & rendering**
-- ⚙️ **FastAPI backend**
-- 🖥️ **Gradio UI**
-- 🐳 **Docker deployment**
-- 📊 **Prometheus + Grafana monitoring**
-- 📱 **iOS UI prototypes**
-- ☁️ **Remote GPU inference (Kaggle)**
+-  **AI summarization models (T5, BART)**
+-  **LaTeX equation extraction & rendering**
+-  **FastAPI backend**
+-  **Gradio UI**
+-  **Docker deployment**
+-  **Prometheus + Grafana monitoring**
+-  **iOS UI prototypes**
+-  **Remote GPU inference (Kaggle)**
 
-## 🎥 **System Demo Video (Google Drive)**
+## System Demo Video (Google Drive)
 
 Since GitHub does not allow uploading large .mov files, the demo video is hosted on Google Drive:
 🔗 Demo Video: [https://drive.google.com/your-video-link](https://drive.google.com/file/d/1Ei_goGmW-2tYrxa5s9L3yhcWSFytvwmk/view?usp=drive_link)
 
-## 📁 **Project Structure**
+## Project Structure
 
 ```
 ├── App design
@@ -79,50 +79,50 @@ Since GitHub does not allow uploading large .mov files, the demo video is hosted
 └── videos
     └── Screen Recording 2025-11-26 at 6.27.09 AM.mov
 ```
-## ✨ Features
+## Features
 
-### 🔍 AI Summarization
+### AI Summarization
 
 - T5-small (fast, lightweight)
 - BART-large (high accuracy)
 - Section-wise summarization
 - Handles long scientific text
 
-### 🧮 LaTeX Equation Handling
+### LaTeX Equation Handling
 
 - Detects inline & block equations
 - Renders equations as images
 - Ranks important equations
 
-### ⚙️ FastAPI Backend
+### FastAPI Backend
 
 - ```/summarize-latex``` endpoint
 - PDF/LaTeX processing
 - JSON structured output
 
-### 🖥️ Gradio UI
+### Gradio UI
 
 - Upload interface
 - Real-time response
 - Feedback collection
 
-### 🐳 Deployment
+### Deployment
 
 - Dockerfile + docker-compose
 - Separate services for API, Gradio, Prometheus
 - Works on local + cloud environments
 
-### 📊 Monitoring
+### Monitoring
 
 - Prometheus for metric scraping
 - Grafana dashboards
 - Custom metric: ```summariq_feedback_total```
 
-### 📱 iOS Mobile App Prototype
+### iOS Mobile App Prototype
 - Screens included in ```App design/```
 - Designed for future live deployment
 
-## ⚙️ Installation
+## Installation
 ### 1. Clone the repository
 ```
 git clone https://github.com/yourusername/SummarIQ.git
@@ -145,7 +145,7 @@ This project uses two separate requirements files:
   ```
   pip install -r requirements.txt
   ```
-## 🐳 Run with Docker
+## Run with Docker
 - #### Build containers
   ```
   docker-compose build
@@ -170,7 +170,7 @@ uvicorn app:app --reload --port 8000
 python gradio_app.py
 ```
 
-## 🧪 API Usage
+## API Usage
 ### Endpoint
 ```
 POST /summarize-latex
@@ -184,8 +184,46 @@ curl -X POST -F "file=@sample.tex" http://localhost:8000/summarize-latex
 utils/response_server/api_response.json
 ```
 
+## Model Pipeline
 
+- Receive LaTeX/PDF
+- Extract sections & equations
+- Preprocess scientific text
+- Summarize using T5/BART
+- Produce structured JSON output
+- Render LaTeX equations
+- Display summary in Gradio / iOS UI
 
+## Monitoring (Prometheus + Grafana)
+Metrics collected:
+- API latency (p50, p90, p95)
+- Total requests
+- Feedback count ```summariq_feedback_total```
+- CPU/RAM usage
+- Docker container performance
+- Error rates
+Dashboards:
+- Grafana → http://localhost:3000
+- Prometheus → http://localhost:9090
+
+## iOS App Prototype
+Located in ```App design/```:
+Includes:
+- Login screen
+- Upload screen
+- Processing screen
+- Summary UI design
+Powered by SwiftUI (planned for Phase 2 deployment).
+
+## Roadmap
+**Phase 2**
+- Fine-tuned summarization (domain-specific)
+- Full iOS app integration
+- Deploy backend to AWS/GCP
+- Real-time feedback storage in DB (MongoDB/PostgreSQL)
+- Advanced Grafana dashboards
+- Semantic equation understanding
+- User accounts + authentication
   
 
 
