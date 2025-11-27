@@ -121,3 +121,71 @@ Since GitHub does not allow uploading large .mov files, the demo video is hosted
 ### 📱 iOS Mobile App Prototype
 - Screens included in ```App design/```
 - Designed for future live deployment
+
+## ⚙️ Installation
+### 1. Clone the repository
+```
+git clone https://github.com/yourusername/SummarIQ.git
+cd SummarIQ
+```
+### 2.Create a virtual environment
+```
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+This project uses two separate requirements files:
+
+- #### requirements_projects.txt(local development)
+  ```
+  pip install -r requirements_projects.txt
+  ```
+- #### requirements.txt(Docker/production)
+  ```
+  pip install -r requirements.txt
+  ```
+## 🐳 Run with Docker
+- #### Build containers
+  ```
+  docker-compose build
+  ```
+- #### Start services
+  ```
+  docker-compose up
+  ```
+This starts:
+- **FastAPI** → http://localhost:8000
+- **Gradio UI** → http://localhost:7860
+- **Prometheus** → http://localhost:9090
+- **Grafana** → http://localhost:3000
+
+## Run Locally (without Docker)
+### Start FastAPI server
+```
+uvicorn app:app --reload --port 8000
+```
+## Start Gradio UI
+```
+python gradio_app.py
+```
+
+## 🧪 API Usage
+### Endpoint
+```
+POST /summarize-latex
+```
+### Example (cURL)
+```
+curl -X POST -F "file=@sample.tex" http://localhost:8000/summarize-latex
+```
+### Output Example
+```
+utils/response_server/api_response.json
+```
+
+
+
+  
+
+
