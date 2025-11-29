@@ -1,13 +1,13 @@
 from fastapi import FastAPI, UploadFile, File, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from models.summarizer_remote import SummarizerRemote
+from src.models.summarizer_remote import SummarizerRemote
 from prometheus_client import Counter, Histogram, generate_latest, Gauge
 # from summarizer_local import SummarizerLocal
-from extractor.latex_extractor import LatexExtractor
+from src.extractor.latex_extractor import LatexExtractor
 import tempfile
 import os
 from pydantic import BaseModel
-from equation_renderer.renderer import latex_to_png_base64
+from src.equation_renderer.renderer import latex_to_png_base64
 import time
 import json
 import gradio as gr
