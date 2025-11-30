@@ -1,13 +1,21 @@
 global:
   scrape_interval: 5s
 
-# scrape_configs:
-#   - job_name: 'summar_api'
-#     static_configs:
-#       - targets: ['gradio-app:8000']
+## ADD ALERT RULES 
+rule_files:
+  - "alert_rules.yml"
 
 scrape_configs:
-  - job_name: 'summar_api'
+  - job_name: 'summariq_api'
     metrics_path: /metrics
     static_configs:
       - targets: ['summar_api:8000']
+
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['node_exporter:9100']
+
+  ## Add gpu metrices later
+  # - job_name: 'gpu_exporter'
+  #   static_configs:
+  #     - targets: ['nvidia_gpu_exporter:9400']

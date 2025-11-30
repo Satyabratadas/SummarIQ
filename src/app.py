@@ -12,6 +12,37 @@ import time
 import json
 import gradio as gr
 
+app = FastAPI(
+    title="SummarIQ API",
+    version="1.0",
+    description="AI-powered summarization system for scientific LaTeX research papers."
+)
+
+## CORS
+app.add_middleware( CORSMiddleware,
+    allow_origins=["*"],allow_credentials=True,
+    allow_methods=["*"],allow_headers=["*"],
+)
+
+##   Prometheus Metrics calculate
+@app.middleware("http")
+async def prometheus_metrics(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+
+    REQUEST_LATENCY.labels(
+        endpoint=request.url.path
+    ).observe(process_time)
+
+    PREDICTION_COUNTER.labels(
+        method=request.method,
+        endpoint=request.url.path,
+        http_status=str(response.status_code)
+    ).inc()
+
+    return response
+
 class FeedbackModel(BaseModel):
     name: str | None = None
     rating: int
@@ -58,17 +89,11 @@ FEEDBACK_NO_COMMENTS = Counter(
 )
 
 
-app = FastAPI(
-    title="SummarIQ API",
-    version="1.0",
-    description="AI-powered summarization system for scientific LaTeX research papers."
-)
+@app.get("/metrics")
+async def metrics():
+    return Response(generate_latest(), media_type="text/plain")
 
-## CORS
-app.add_middleware( CORSMiddleware,
-    allow_origins=["*"],allow_credentials=True,
-    allow_methods=["*"],allow_headers=["*"],
-)
+
 
 ## MODEL_PATH = "/content/drive/MyDrive/Summar_IQ_T5Model/t5_large"           ## need to change accordingly
 
@@ -87,17 +112,8 @@ def get_equation_image(latex: str):
     """Return raw base64 for a LaTeX equation."""
     return latex_to_png_base64(latex)
 
-##   Prometheus Metrics calculate
-@app.middleware("http")
-async def prometheus_metrics(request: Request, call_next):
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
 
-    REQUEST_LATENCY.labels(request.url.path).observe(process_time)
-    PREDICTION_COUNTER.labels(request.method, request.url.path, response.status_code).inc()
 
-    return response
 
 @app.post("/feedback")
 async def feedback_endpoint(fb: FeedbackModel):
@@ -113,11 +129,6 @@ async def feedback_endpoint(fb: FeedbackModel):
         FEEDBACK_NO_COMMENTS.inc()
 
     return {"status": "ok", "msg": "Feedback recorded"}
-
-
-@app.get("/metrics")
-async def metrics():
-    return Response(generate_latest(), media_type="text/plain")
 
 
 ## Summarization Endpoint

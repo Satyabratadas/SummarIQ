@@ -1,0 +1,220 @@
+{
+  "dashboard": 
+  {
+        "id": null,
+        "title": "SummarIQ Monitoring Dashboard",
+        "tags": ["summariq", "monitoring", "ai", "fastapi"],
+        "timezone": "browser",
+        "schemaVersion": 36,
+        "version": 1,
+        "refresh": "5s",
+        "panels": [
+        {
+            "type": "stat",
+            "title": "Total API Requests",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "sum(summariq_request_count_total)",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4}
+        },
+        {
+            "type": "stat",
+            "title": "Requests Per Second",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "sum(rate(summariq_request_count[1m]))",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 8, "y": 0, "w": 8, "h": 4}
+        },
+        {
+            "type": "stat",
+            "title": "Average Latency (5m)",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "rate(summariq_request_latency_seconds_sum[5m]) / rate(summariq_request_latency_seconds_count[5m])",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 16, "y": 0, "w": 8, "h": 4}
+        },
+        {
+            "type": "graph",
+            "title": "Latency Over Time",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "rate(summariq_request_latency_seconds_sum[1m]) / rate(summariq_request_latency_seconds_count[1m])",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 4, "w": 24, "h": 8}
+        },
+        {
+            "type": "graph",
+            "title": "API Status Codes",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "sum by (http_status) (summariq_request_count)",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 12, "w": 12, "h": 8}
+        },
+        {
+            "type": "graph",
+            "title": "Equation Extraction Count",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "sum(rate(summariq_equation_count[1m]))",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 12, "y": 12, "w": 12, "h": 8}
+        },
+        {
+            "type": "stat",
+            "title": "Total Feedback Submissions",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "summariq_feedback_total",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 20, "w": 8, "h": 4}
+        },
+        {
+            "type": "graph",
+            "title": "Feedback Ratings Distribution",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "summariq_feedback_rating_bucket",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 8, "y": 20, "w": 16, "h": 8}
+        },
+        
+        
+        {
+        "type": "stat",
+        "title": "CPU Usage (%)",
+        "datasource": {"type": "prometheus", "uid": "Prometheus"},
+        "targets": [
+          {
+            "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[1m])) * 100)",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"x": 0, "y": 28, "w": 8, "h": 4}
+        },
+        {
+            "type": "stat",
+            "title": "Memory Usage (%)",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 8, "y": 28, "w": 8, "h": 4}
+        },
+        {
+            "type": "stat",
+            "title": "Disk Usage (%)",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "100 - ((node_filesystem_free_bytes{mountpoint=\"/\"} / node_filesystem_size_bytes{mountpoint=\"/\"}) * 100)",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 16, "y": 28, "w": 8, "h": 4}
+        },
+        {
+            "type": "graph",
+            "title": "Disk Read/Write (MB/s)",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "rate(node_disk_read_bytes_total[1m]) / 1024 / 1024",
+                "legendFormat": "Read MB/s",
+                "refId": "A"
+            },
+            {
+                "expr": "rate(node_disk_written_bytes_total[1m]) / 1024 / 1024",
+                "legendFormat": "Write MB/s",
+                "refId": "B"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 32, "w": 12, "h": 8}
+        },
+        {
+            "type": "graph",
+            "title": "Network Traffic (MB/s)",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "rate(node_network_receive_bytes_total[1m]) / 1024 / 1024",
+                "legendFormat": "Download",
+                "refId": "A"
+            },
+            {
+                "expr": "rate(node_network_transmit_bytes_total[1m]) / 1024 / 1024",
+                "legendFormat": "Upload",
+                "refId": "B"
+            }
+            ],
+            "gridPos": {"x": 12, "y": 32, "w": 12, "h": 8}
+        },
+        {
+            "type": "graph",
+            "title": "System Load Average",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            {
+                "expr": "node_load1",
+                "legendFormat": "Load 1m",
+                "refId": "A"
+            },
+            {
+                "expr": "node_load5",
+                "legendFormat": "Load 5m",
+                "refId": "B"
+            },
+            {
+                "expr": "node_load15",
+                "legendFormat": "Load 15m",
+                "refId": "C"
+            }
+            ],
+            "gridPos": {"x": 0, "y": 40, "w": 12, "h": 8}
+        },
+        {
+            "type": "stat",
+            "title": "Open File Descriptors",
+            "datasource": {"type": "prometheus", "uid": "Prometheus"},
+            "targets": [
+            { 
+                "expr": "node_filefd_allocated",
+                "refId": "A"
+            }
+            ],
+            "gridPos": {"x": 12, "y": 40, "w": 12, "h": 4}
+            }
+            
+        ]
+    }
+}

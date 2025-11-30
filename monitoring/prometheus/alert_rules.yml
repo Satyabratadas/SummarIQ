@@ -1,0 +1,31 @@
+groups:
+  - name: summarIQ_alerts
+    rules:
+
+      - alert: HighLatency
+        expr: rate(summariq_request_latency_seconds_sum[5m])
+              / rate(summariq_request_latency_seconds_count[5m]) > 3
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          description: "Latency has been above 3 seconds for 2 minutes."
+          summary: "High SummarIQ API latency"
+
+      - alert: LowFeedback
+        expr: summariq_feedback_total < 3
+        for: 10m
+        labels:
+          severity: info
+        annotations:
+          description: "Feedback count is low (<3 in last 10 minutes)"
+          summary: "Low User Feedback"
+
+      - alert: APIErrorRate
+        expr: rate(summariq_request_count{http_status=~"5.."}[5m]) > 0.1
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "SummarIQ API error spike"
+          description: "5xx error rate exceeding 10%."
