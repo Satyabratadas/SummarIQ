@@ -43,6 +43,23 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: admin
     volumes:
       - grafana-storage:/var/lib/grafana
+  
+  node_exporter:
+    image: prom/node-exporter
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    restart: always
+
+  # gpu_exporter:
+  #   image: nvcr.io/nvidia/k8s/dcgm-exporter:3.1.8-3.4.0
+  #   container_name: nvidia_gpu_exporter
+  #   runtime: nvidia
+  #   environment:
+  #     - NVIDIA_VISIBLE_DEVICES=all
+  #   ports:
+  #     - "9400:9400"
+  #   restart: always
 
 volumes:
   grafana-storage:

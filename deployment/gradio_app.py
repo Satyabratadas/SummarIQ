@@ -17,24 +17,38 @@ def init_feedback_file():
             json.dump([], f)
 
 
-def save_feedback(name, rating, comments):
-    init_feedback_file()
+# def save_feedback(name, rating, comments):
+#     init_feedback_file()
 
-    entry = {
+#     entry = {
+#         "name": name,
+#         "rating": rating,
+#         "comments": comments
+#     }
+
+#     with open(FEEDBACK_FILE, "r") as f:
+#         data = json.load(f)
+
+#     data.append(entry)
+
+#     with open(FEEDBACK_FILE, "w") as f:
+#         json.dump(data, f, indent=4)
+
+#     return "✅ Thank you! Your feedback has been recorded."
+
+def send_feedback_to_api(name, rating, comments):
+    payload = {
         "name": name,
-        "rating": rating,
+        "rating": int(rating),
         "comments": comments
     }
+    response = requests.post("http://summar_api:8000/feedback", json=payload)
 
-    with open(FEEDBACK_FILE, "r") as f:
-        data = json.load(f)
+    if response.status_code == 200:
+        return "✅ Thank you! Your feedback was sent to the backend and recorded in metrics."
+    else:
+        return "❌ Error: Feedback not sent!"
 
-    data.append(entry)
-
-    with open(FEEDBACK_FILE, "w") as f:
-        json.dump(data, f, indent=4)
-
-    return "✅ Thank you! Your feedback has been recorded."
 
 
 # Convert base64 → image
@@ -125,7 +139,7 @@ with gr.Blocks() as demo:
             fb_response = gr.HTML()
 
             submit_fb.click(
-                save_feedback,
+                send_feedback_to_api,
                 inputs=[name, rating, comments],
                 outputs=fb_response
             )
