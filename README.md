@@ -19,66 +19,103 @@ Since GitHub does not allow uploading large .mov files, the demo video is hosted
 🔗 Demo Video: [https://drive.google.com/your-video-link](https://drive.google.com/file/d/1Ei_goGmW-2tYrxa5s9L3yhcWSFytvwmk/view?usp=drive_link)
 
 ## Project Structure
-
 ```
 ├── App design
-│   ├── Purple Pink Gradient Login Page Mobile Prototype (3)
-│   │   ├── 1.jpg
-│   │   ├── 2.jpg
-│   │   └── 3.jpg
-│   ├── Screen_1.png
-│   ├── Screen_2.png
-│   └── Screen_3.png
-├── Notebooks
-│   ├── bart_train.ipynb
-│   ├── kaggle_server_run.ipynb
-│   ├── t5_model_test.ipynb
-│   ├── test_summarize.ipynb
-│   ├── test_t5_small.ipynb
-│   ├── training.ipynb
-│   └── valset_test.ipynb
+│   ├── Purple Pink Gradient Login Page Mobile Prototype (3)
+│   │   ├── 1.jpg
+│   │   ├── 2.jpg
+│   │   └── 3.jpg
+│   ├── Screen_1.png
+│   ├── Screen_2.png
+│   └── Screen_3.png
 ├── deployment
-│   ├── Dockerfile
-│   ├── docker-compose.yml
-│   └── gradio_app.py
+│   ├── docker-compose.yml
+│   ├── Dockerfile
+│   └── gradio_app.py
 ├── documentation
-│   ├── Elevator Pitch.pdf
-│   ├── README.md
-│   └── SummarIQ.pdf
+│   ├── plot_images
+│   │   ├── Architechture_diagram.png
+│   │   ├── fairness_explainability.png
+│   │   ├── githubrepo.png
+│   │   ├── sample_equation_output.png
+│   │   ├── sample_summary_output.png
+│   │   └── shap_summary.png
+│   ├── Poster.pdf
+│   ├── Project_report.pdf
+│   └── SummarIQ_project_template.pdf
 ├── monitoring
-│   ├── grafana
-│   ├── metrices_report
-│   │   ├── metrics_report_valset.csv
-│   │   └── structured_summary.csv
-│   └── prometheus
-│       └── prometheus.yml
-├── requirements.txt
+│   ├── grafana
+│   │   └── summariq_graphana_dashboard.json
+│   ├── metrices_report
+│   │   ├── metrics_report_valset.csv
+│   │   ├── monitoring_images
+│   │   │   ├── cpu_usage.png
+│   │   │   ├── Fairlear_matrices.png
+│   │   │   ├── feedback_latest_rating.png
+│   │   │   ├── feedback_no_comments_total.png
+│   │   │   ├── feedback_rating.png
+│   │   │   ├── feedback_total.png
+│   │   │   ├── feedback_with_comments_total.png
+│   │   │   ├── localhost_metrices_log.png
+│   │   │   ├── request_count.png
+│   │   │   ├── request_latency_seconds.png
+│   │   │   └── shap_values.png
+│   │   └── structured_summary.csv
+│   └── prometheus
+│       ├── alert_rules.yml
+│       └── prometheus.yml
+├── Notebooks
+│   ├── bart_train.ipynb
+│   ├── kaggle_server_run.ipynb
+│   ├── risk_management.ipynb
+│   ├── t5_model_test.ipynb
+│   ├── test_summarize.ipynb
+│   ├── test_t5_small.ipynb
+│   ├── training.ipynb
+│   └── valset_test.ipynb
+├── README.md
 ├── requirements_projects.txt
+├── requirements.txt
 ├── src
-│   ├── app.py
-│   ├── data
-│   │   ├── Test_pdf
-│   │   │   ├── 2404.08534v2.pdf
-│   │   │   └── sm.tex
-│   │   └── latex_extracted.json
-│   ├── equation_renderer
-│   │   ├── eqapp.py
-│   │   └── renderer.py
-│   ├── extractor
-│   │   ├── extract_usingcv.py
-│   │   └── latex_extractor.py
-│   ├── models
-│   │   └── summarizer_remote.py
-│   ├── summarizer_kaggle.py
-│   ├── summarizer_local.py
-│   └── utils
-│       ├── load_data.py
-│       └── response_server
-│           ├── api_response.json
-│           └── response_without_T5server.json
-└── videos
-    └── Screen Recording 2025-11-26 at 6.27.09 AM.mov
+    ├── __pycache__
+    │   └── app.cpython-310.pyc
+    ├── app.py
+    ├── data
+    │   ├── latex_extracted.json
+    │   └── Test_pdf
+    │       ├── 2404.08534v2.pdf
+    │       ├── sm.pdf
+    │       ├── sm.tex
+    │       ├── Tower_V3.tex
+    │       └── tower.pdf
+    ├── equation_renderer
+    │   ├── __pycache__
+    │   │   ├── app.cpython-310.pyc
+    │   │   ├── eqapp.cpython-310.pyc
+    │   │   ├── quicklatex_app.cpython-310.pyc
+    │   │   ├── quicklatex_renderer.cpython-310.pyc
+    │   │   └── renderer.cpython-310.pyc
+    │   ├── eqapp.py
+    │   └── renderer.py
+    ├── extractor
+    │   ├── __pycache__
+    │   │   └── latex_extractor.cpython-310.pyc
+    │   ├── extract_usingcv.py
+    │   └── latex_extractor.py
+    ├── models
+    │   ├── __pycache__
+    │   │   └── summarizer_remote.cpython-310.pyc
+    │   └── summarizer_remote.py
+    ├── summarizer_kaggle.py
+    ├── summarizer_local.py
+    └── utils
+        ├── load_data.py
+        └── response_server
+            ├── api_response.json
+            └── response_without_T5server.json
+
 ```
+
 ## Features
 
 ### AI Summarization
