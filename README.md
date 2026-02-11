@@ -16,7 +16,7 @@ This project includes:
 ## System Demo Video (Google Drive)
 
 Since GitHub does not allow uploading large .mov files, the demo video is hosted on Google Drive:
-🔗 Demo Video: [https://drive.google.com/your-video-link](https://drive.google.com/file/d/1Ei_goGmW-2tYrxa5s9L3yhcWSFytvwmk/view?usp=drive_link)
+🔗 Demo Video: https://youtu.be/uZSs3ksrZ98
 
 ## Project Structure
 ```
