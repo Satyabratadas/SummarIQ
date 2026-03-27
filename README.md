@@ -13,10 +13,15 @@ This project includes:
 -  **iOS UI prototypes**
 -  **Remote GPU inference (Kaggle)**
 
-## System Demo Video (Google Drive)
+---
 
-Since GitHub does not allow uploading large .mov files, the demo video is hosted on Google Drive:
-🔗 Demo Video: https://youtu.be/uZSs3ksrZ98
+## 🎥 System Demo Video
+
+Watch the system in action:
+
+[[![Watch the demo](https://img.youtube.com/vi/s3JzzzPyIjI/maxresdefault.jpg)](https://youtu.be/s3JzzzPyIjI)]
+
+---
 
 ## Project Structure
 ```
