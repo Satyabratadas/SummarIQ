@@ -19,7 +19,7 @@ This project includes:
 
 Watch the system in action:
 
-[[![Watch the demo](https://img.youtube.com/vi/s3JzzzPyIjI/maxresdefault.jpg)](https://youtu.be/s3JzzzPyIjI)]
+[![Watch the demo](https://img.youtube.com/vi/uZSs3ksrZ98/0.jpg)](https://youtu.be/uZSs3ksrZ98)
 
 ---
 
